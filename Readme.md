@@ -8,3 +8,5 @@ As the sample is processed and the results of this processing is also provided w
 
 This implementation is still only a private project to explore the technological feasibility of those requirements.
 I also use it to further my understanding and knowledge of tools to implement safe multithreading abstractions.
+
+The implementation is not targeted for use with multiple producers or multiple consumers.

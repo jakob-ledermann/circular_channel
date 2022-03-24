@@ -4,15 +4,19 @@ use std::{
     time::Duration,
 };
 
+use rand::prelude::*;
+
 fn main() {
     let (tx, rx) = circular_channel::circular_channel::<i16>(100);
 
     let _sender = thread::spawn(move || {
         let mut counter = 0i16;
+        let mut rng = rand::thread_rng();
         loop {
             tx.send(counter);
             counter = counter.wrapping_add(1);
-            sleep(Duration::from_nanos(10));
+            let pause = rng.gen_range(0..10_000_000);
+            sleep(Duration::from_nanos(pause));
         }
     });
 
@@ -20,6 +24,7 @@ fn main() {
         let stdout = std::io::stdout();
         let mut stdout = stdout.lock();
         let mut prev: Option<i16> = None;
+        let mut rng = rand::thread_rng();
         loop {
             if let Some(val) = rx.recv() {
                 match prev {
@@ -36,7 +41,8 @@ fn main() {
                 }
                 prev = Some(val);
             }
-            thread::sleep(Duration::from_nanos(5));
+            let pause = rng.gen_range(0..10_000_000);
+            thread::sleep(Duration::from_nanos(pause));
         }
     });
 
